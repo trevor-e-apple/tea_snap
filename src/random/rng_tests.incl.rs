@@ -85,6 +85,77 @@ fn rand_u8_partial_range() {
     assert!(attempts < MAX_ATTEMPTS);
 }
 
+/// test that we can generate the whole range of signed random values
+#[test]
+fn rand_i8_full_range() {
+    const MAX_ATTEMPTS: u32 = 20000;
+    const COUNT: i32 = i8::MAX as i32 - i8::MIN as i32;
+    let mut generator = instance(0);
+
+    let mut attempts = 0;
+    let mut set = HashSet::new();
+    while attempts < MAX_ATTEMPTS {
+        let value = generator.rand_i8(i8::MIN, i8::MAX);
+        set.insert(value);
+        if (set.len() as i32) == COUNT {
+            break;
+        }
+
+        attempts += 1;
+    }
+
+    assert!(attempts < MAX_ATTEMPTS);
+}
+
+/// test that we can generate the partial range of signed random values
+#[test]
+fn rand_i8_partial_range() {
+    const MAX_ATTEMPTS: u32 = 20000;
+    const START: i8 = i8::MAX / 4;
+    const END: i8 = 3 * (i8::MAX / 4);
+    let mut generator = instance(0);
+
+    let mut attempts = 0;
+    let mut set = HashSet::new();
+    while attempts < MAX_ATTEMPTS {
+        let value = generator.rand_i8(START, END);
+        assert!(value >= START);
+        assert!(value < END);
+
+        set.insert(value);
+        if (set.len() as i8) == (END - START) {
+            break;
+        }
+
+        attempts += 1;
+    }
+
+    assert!(attempts < MAX_ATTEMPTS);
+}
+
+/// test that we can generate the whole range of signed random values
+#[test]
+fn rand_i16_full_range() {
+    const COUNT: i32 = i16::MAX as i32 - i16::MIN as i32;
+    const MAX_ATTEMPTS: u64 = 50 * COUNT as u64;
+
+    let mut generator = instance(0);
+
+    let mut attempts = 0;
+    let mut set = HashSet::new();
+    while attempts < MAX_ATTEMPTS {
+        let value = generator.rand_i16(i16::MIN, i16::MAX);
+        set.insert(value);
+        if (set.len() as i32) == COUNT {
+            break;
+        }
+
+        attempts += 1;
+    }
+
+    assert!(attempts < MAX_ATTEMPTS);
+}
+
 /// test to see if 
 #[test]
 fn sample_discrete() {
